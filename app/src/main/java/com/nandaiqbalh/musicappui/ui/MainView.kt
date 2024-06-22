@@ -59,6 +59,10 @@ fun MainView() {
 		mutableStateOf(currentScreen.title)
 	}
 
+	val dialogOpen = remember {
+		mutableStateOf(false)
+	}
+
 	Scaffold(
 
 		topBar = {
@@ -90,6 +94,7 @@ fun MainView() {
 
 						if (item.dRoute == Screen.DrawerScreen.AddAccount.dRoute) {
 							// open dialog
+							dialogOpen.value = true
 						} else {
 							controller.navigate(item.dRoute)
 							title.value = item.dTitle
@@ -100,6 +105,8 @@ fun MainView() {
 		}
 	) {
 		Navigation(navController = controller, viewModel = viewModel, pd = it)
+
+		AccountDialog(isDialogOpen = dialogOpen)
 	}
 }
 
