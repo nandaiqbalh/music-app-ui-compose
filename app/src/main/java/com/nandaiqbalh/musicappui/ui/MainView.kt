@@ -5,8 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -34,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.nandaiqbalh.musicappui.MainViewModel
 import com.nandaiqbalh.musicappui.Navigation
 import com.nandaiqbalh.musicappui.Screen
+import com.nandaiqbalh.musicappui.screensInBottom
 import com.nandaiqbalh.musicappui.screensInDrawer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -63,8 +67,34 @@ fun MainView() {
 		mutableStateOf(false)
 	}
 
-	Scaffold(
+	val bottomBar: @Composable () -> Unit = {
+		if (currentScreen is Screen.DrawerScreen || currentScreen == Screen.BottomScreen.Home) {
+			BottomNavigation(modifier = Modifier.wrapContentSize()) {
+				screensInBottom.forEach { item ->
+					BottomNavigationItem(
+						selected = currentRoute == item.bRoute,
+						onClick = { controller.navigate(item.bRoute) },
+						icon = {
+							Icon(
+								painter = painterResource(id = item.icon),
+								contentDescription = null
+							)
+						},
+						label = {
+							Text(text = item.bTitle)
+						},
+						selectedContentColor = Color.White,
+						unselectedContentColor = Color.Black
+					)
+				}
 
+			}
+
+		}
+	}
+
+	Scaffold(
+		bottomBar = bottomBar,
 		topBar = {
 			TopAppBar(
 				title = { Text(text = title.value) },
